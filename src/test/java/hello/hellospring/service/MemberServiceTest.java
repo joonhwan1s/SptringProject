@@ -4,6 +4,8 @@ import hello.hellospring.domain.Member;
 
 import hello.hellospring.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -11,13 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MemberServiceTest {
 
-    MemberService memberService = new MemberService();
-    MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+    MemberService memberService;
+    MemoryMemberRepository memberRepository;
+    //MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+    @BeforeEach//각 테스트를 실행하기전에 해준다.
+    public void beforeEach(){
+        memberRepository = new MemoryMemberRepository();//같은 memoryMemberRepository를 사용하기 위함 이렇게 memberReposiroty객체는 static이 사용되지 않는다면 문제가 된다. 이렇게 바꿔줌으로 의존성 주입을 한다.
+        memberService = new MemberService(memberRepository);
+    }
+    @AfterEach//메서드가 끝날때마다 실행되는 함수
+    public void afterEach(){
+        memberRepository.clearStore();
+    }
     @Test
     void 회원가입() {
         //given
         Member member = new Member();
-        member.setName("spring");
+        member.setName("hello");
 
         //when
         Long saveId = memberService.join(member);
@@ -38,9 +50,9 @@ class MemberServiceTest {
 
         //when
         memberService.join(member1);
-        IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));//위 로직을 실행하면 뒤 예외타입과 같은지 혹은 터지는지 검사
 
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원 입니다.");
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원 입니다.");//이러한 예외가 터지면(문자일치여부)
 
 //        try{
 //            memberService.join(member2);

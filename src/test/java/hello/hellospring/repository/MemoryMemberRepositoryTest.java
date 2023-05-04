@@ -14,6 +14,7 @@ public class MemoryMemberRepositoryTest {
 
     MemoryMemberRepository repository = new MemoryMemberRepository();
 
+
     @AfterEach//메서드가 끝날때마다 실행되는 함수
     public void afterEach(){
         repository.clearStore();
