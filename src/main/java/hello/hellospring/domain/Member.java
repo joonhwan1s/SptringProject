@@ -1,6 +1,6 @@
 package hello.hellospring.domain;
 
-public class Member {
+public class Member {//회원, 주문 등을 DB에 저장하고 관리
 
     private Long id;
     private String name;

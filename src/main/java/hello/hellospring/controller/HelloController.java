@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller
+@Controller//컨트롤러라는 어노테이션을 보고 스프링이 생성될때 helloController 객체를 들고 있는다. = 스프링 컨테이너에서 스프링 빈이 관리된다.
 public class HelloController {
     @GetMapping("hello")
     public String hello(Model model) {
@@ -27,7 +27,7 @@ public class HelloController {
     }
 
     @GetMapping("hello-api")
-    @ResponseBody
+
     public Hello HelloApi(@RequestParam("name") String name){
         Hello hello = new Hello();
         hello.setName(name);
