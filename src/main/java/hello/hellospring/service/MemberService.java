@@ -5,10 +5,12 @@ import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 //@Service//이것을 넣어줌으로 MemberController로부터 호출 받을 수 있도록 만들어준다
+@Transactional//데이터를 저장하고 변경할때는 항상 트랜잭션이 필요하다.
 public class MemberService {
 //순수한 자바코드이기 때문에 스프링이 가져오지 못한다. 그러기 위해서는 @Service를 등록해줘야 한다.
     private final MemberRepository memberRepository;
@@ -20,6 +22,7 @@ public class MemberService {
     //회원가입
     public Long join(Member member){//validateDuplicateMember 메소드의 내용을 리팩토링하여 추출
         //같은 이름 중복회원은 안된다.
+
         validateDuplicateMember(member);//중복회원 검증하고 통과하면 저장한다.
         memberRepository.save(member);
         return member.getId();
@@ -33,8 +36,8 @@ public class MemberService {
     }
 
     public List<Member> findMembers() {//전체 회원 조회
-        return memberRepository.findAll();
 
+                return memberRepository.findAll();
     }
 
     public Optional<Member> findOne(Long memberId){

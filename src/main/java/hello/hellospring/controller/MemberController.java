@@ -17,6 +17,7 @@ public class MemberController {//컨트롤러가 memberService를 통해서 회�
     @Autowired// Autowired는 스프링 컨테이너에서 memberservice를 가져온다.
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+        System.out.println("Service =" + memberService.getClass());//memberservice를 가지고 코드를 복제하는 기술
     }//생성자로 생성
 
     @GetMapping("/members/new")

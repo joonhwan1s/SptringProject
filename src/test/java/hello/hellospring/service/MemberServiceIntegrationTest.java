@@ -1,10 +1,12 @@
 package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
+import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,26 +14,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@Transactional
+@Transactional//데스트 완료후 항상 롤백하여 DB클리어
 class MemberServiceIntegrationTest {
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;//중복검사 이후 저장된 값을 클리어해주기위해 Reposityory를 불러와 다 끝나고나면 DB의 값을 날려준다.
+    @Autowired MemberService memberService;
+    @Autowired
+    MemberRepository memberRepository;//중복검사 이후 저장된 값을 클리어해주기위해 Reposityory를 불러와 다 끝나고나면 DB의 값을 날려준다.
+
     //MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    @BeforeEach//각 테스트를 실행하기전에 해준다.
-    public void beforeEach(){
-        memberRepository = new MemoryMemberRepository();//같은 memoryMemberRepository를 사용하기 위함 이렇게 memberReposiroty객체는 static이 사용되지 않는다면 문제가 된다. 이렇게 바꿔줌으로 의존성 주입을 한다.
-        memberService = new MemberService(memberRepository);
-    }
-    @AfterEach//메서드가 끝날때마다 실행되는 함수
-    public void afterEach(){
-        memberRepository.clearStore();
-    }
+//
+//    @AfterEach//메서드가 끝날때마다 실행되는 함수
+//    public void afterEach(){
+//        memberRepository.clearStore();
+//    } transactional 때문에 필요없다.
     @Test
     void 회원가입() {
         //given 상황이 주어졌을 때
         Member member = new Member();
-        member.setName("hello");
+        member.setName("hello1");
 
         //when 이것을 실행했을 때
         Long saveId = memberService.join(member);
